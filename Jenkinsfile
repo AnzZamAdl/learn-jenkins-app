@@ -40,36 +40,27 @@ pipeline {
                         '''
                     }
                 }
-                stage('E2E') {
-                            agent {
-                                docker {
-                                    image 'mcr.microsoft.com/playwright:v1.39.0-jammy'
-                                    reuseNode true
-                                }
-                            }
-                            steps {
-                                sh '''
-                                    npm install serve
-                                    nohup node_modules/.bin/serve -s build -l 5000 > serve.log 2>&1 &
-                                    sleep 10
-                                    npx playwright test --reporter=html
-                                '''
-                            }
-                            post {
-                                always {
-                                    pkill -f "serve"  // Ensure the background server is stopped
-                                    publishHTML([
-                                            reportDir: 'playwright-report',      // Directory where Playwright's HTML report is generated
-                                            reportFiles: 'index.html',          // Main file of the HTML report
-                                            reportName: 'Playwright Test Report', // Name of the report in Jenkins
-                                            allowMissing: false,                // Fail the build if the report is missing
-                                            alwaysLinkToLastBuild: true,        // Always link the latest report
-                                            keepAll: true                       // Retain reports for all builds
-                                    ])
-                                }
-                            }
+                stage('E2E'){
+                    agent{
+                        docker{
+                            image 'mcr.microsoft.com/playwright:v1.39.0-jammy'
+                            reuseNode true
                         }
-
+                    }
+                    steps{
+                        sh '''
+                            npm install serve
+                            node_modules/.bin/serve -s build &
+                            sleep 10
+                            npx playwright test --reporter=html
+                        '''
+                    }
+                    post{
+                        always{
+                            publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'playwright-report', reportFiles: 'index.html', reportName: 'Playwright Test Report'])
+                        }
+                    }
+                }
             }
         }
         stage('Deploy') {
