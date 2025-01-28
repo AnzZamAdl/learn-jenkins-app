@@ -57,7 +57,7 @@ pipeline {
                     }
                     post{
                         always{
-                            pkill -f "serve"  // Ensure the background server is stopped
+                            pkill -f 'serve'  // Ensure the background server is stopped
                             publishHTML([
                                         reportDir: 'playwright-report',      // Directory where Playwright's HTML report is generated
                                         reportFiles: 'index.html',          // Main file of the HTML report
