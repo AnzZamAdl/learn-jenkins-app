@@ -58,7 +58,7 @@ pipeline {
                     post{
                         always{
                             sh '''
-                                pkill -f serve'
+                                pkill -f serve
                                 publishHTML([
                                         reportDir: 'playwright-report',
                                         reportFiles: 'index.html',
