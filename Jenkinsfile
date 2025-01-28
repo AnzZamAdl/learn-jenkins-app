@@ -57,15 +57,16 @@ pipeline {
                     }
                     post{
                         always{
-                            sh 'pkill -f serve'  // Ensure the background server is stopped
-                            publishHTML([
+                            sh '''
+                                pkill -f serve'  // Ensure the background server is stopped
+                                publishHTML([
                                         reportDir: 'playwright-report',      // Directory where Playwright's HTML report is generated
                                         reportFiles: 'index.html',          // Main file of the HTML report
                                         reportName: 'Playwright Test Report', // Name of the report in Jenkins
                                         allowMissing: false,                // Fail the build if the report is missing
                                         alwaysLinkToLastBuild: true,        // Always link the latest report
                                         keepAll: true                       // Retain reports for all builds
-                                ])
+                                ])'''
                         }
                     }
                 }
