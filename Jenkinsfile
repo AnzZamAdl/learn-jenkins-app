@@ -5,12 +5,7 @@ pipeline {
         NETLIFY_SITE_ID = 'e3092215-119a-41d8-b9a5-853fd9c753d7'
         NETLIFY_AUTH_TOKEN = credentials('netlify-token')
     }
-    stages {
-        stage('Git Checkout'){
-            git changelog: false, poll: false, url: 'https://github.com/AnzZamAdl/learn-jenkins-app.git'
-        }
-        
-        stage('Build') {
+    stage('Build') {
             agent{
                 docker{
                     image 'node:18-alpine'
