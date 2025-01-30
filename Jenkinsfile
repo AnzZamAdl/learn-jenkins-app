@@ -6,6 +6,10 @@ pipeline {
         NETLIFY_AUTH_TOKEN = credentials('netlify-token')
     }
     stages {
+        stage('Git Checkout'){
+            git changelog: false, poll: false, url: 'https://github.com/AnzZamAdl/learn-jenkins-app.git'
+        }
+        
         stage('Build') {
             agent{
                 docker{
